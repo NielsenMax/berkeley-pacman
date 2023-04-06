@@ -8,6 +8,7 @@
 
 from util import manhattanDistance
 from game import Grid
+from functools import reduce
 import os
 import random
 
