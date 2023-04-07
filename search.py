@@ -11,6 +11,7 @@ In search.py, you will implement generic search algorithms which are called
 by Pacman agents (in searchAgents.py).
 """
 
+from game import Directions
 import util
 
 class SearchProblem:
@@ -86,6 +87,8 @@ def search(problem, fringe):
             for candidate in candidate_successors:
                 fringe.push(candidate)
 
+
+
 def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first
@@ -100,6 +103,22 @@ def depthFirstSearch(problem):
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
+    open = util.Stack()
+    open.push((problem.getStartState(), []))
+    closed = set()
+
+    while not open.isEmpty():
+        current = open.pop()
+        state = current[0]
+        path = current[1]
+        if problem.isGoalState(state):
+            return path
+        closed.add(state)
+        for s in problem.getSuccessors(state):
+            if not s[0] in closed:
+                open.push((s[0], path + [s[1]]))
+
+
 
 def breadthFirstSearch(problem):
     """
