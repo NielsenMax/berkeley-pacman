@@ -182,16 +182,17 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 
     while not open.isEmpty():
         current = open.pop()
-        state = current[0]
+        state = current[0][0]
+        cost = current[0][1]
         path = current[1]
 
-        if problem.isGoalState(state[0]):
+        if problem.isGoalState(state):
             return path
         
-        if state[0] not in closed:
-            closed.add(state[0])
-            candidate_successors = problem.getSuccessors(state[0])
-            candidate_successors = map(lambda x: ((x[0], state[1]  + x[2]) , path + [x[1]]), candidate_successors)
+        if state not in closed:
+            closed.add(state)
+            candidate_successors = problem.getSuccessors(state)
+            candidate_successors = map(lambda x: ((x[0], cost  + x[2]) , path + [x[1]]), candidate_successors)
 
             for s in candidate_successors:
                 if not s[0] in closed:
