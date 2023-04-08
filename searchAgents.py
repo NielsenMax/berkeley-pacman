@@ -106,7 +106,7 @@ class SearchAgent(Agent):
         problem = self.searchType(state) # Makes a new search problem
         self.actions  = self.searchFunction(problem) # Find a path
         totalCost = problem.getCostOfActions(self.actions)
-        print('Path found with total cost of %d in %.1f seconds' % (totalCost, time.time() - starttime))
+        print('Path found with total cost of %d in %f seconds' % (totalCost, time.time() - starttime))
         if '_expanded' in dir(problem): print('Search nodes expanded: %d' % problem._expanded)
 
     def getAction(self, state):
@@ -284,7 +284,7 @@ class CornersProblem(search.SearchProblem):
         "Returns the start state (in your state space, not the full Pacman state space)"
         "*** YOUR CODE HERE ***"
         # Creamos una tupla que sean las esquinas aun no visitadas
-        remainingCorners = tuple(x for x in self.corners if x != self.startingPosition)
+        remainingCorners = tuple(filter(lambda x: x != self.startingPosition, self.corners))
         return (self.startingPosition, remainingCorners)
 
     def isGoalState(self, state):
@@ -319,7 +319,7 @@ class CornersProblem(search.SearchProblem):
             # Realizamos un movimiento 
             if not hitsWall:
                 nextPosition = (nextx, nexty)
-                newCorners = tuple(x for x in remainingCorners if x != nextPosition)
+                newCorners = tuple(filter(lambda x: x != nextPosition, remainingCorners))
                 stepCost = self.costFn(nextPosition)
                 successors.append(((nextPosition, newCorners), action, stepCost))
     
