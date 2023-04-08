@@ -359,10 +359,17 @@ def cornersHeuristic(state, problem):
     "*** YOUR CODE HERE ***"
     
     position = state[0]
+    acum = 0
     remainingCorners = state[1]
-    distances = tuple(map(lambda x: util.manhattanDistance(position, x), remainingCorners)) # Manhatan
+    
+    while len(remainingCorners) > 0:
+        distances = tuple(map(lambda x: (x, util.manhattanDistance(position, x)), remainingCorners))
+        maximum = max(distances, key = lambda x: x[1])
+        position = maximum[0]
+        acum += maximum[1]
+        remainingCorners = tuple(filter(lambda x: x != position, remainingCorners)) 
 
-    return sum(distances) if len(distances) > 0 else 0
+    return acum
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
