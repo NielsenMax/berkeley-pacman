@@ -109,8 +109,7 @@ def depthFirstSearch(problem):
 
     while not open.isEmpty():
         current = open.pop()
-        state = current[0]
-        path = current[1]
+        state, path = current
         if state in closed:
             continue
         if problem.isGoalState(state):
@@ -132,8 +131,7 @@ def breadthFirstSearch(problem):
 
     while not open.isEmpty():
         current = open.pop()
-        state = current[0]
-        path = current[1]
+        state, path = current
         if state in closed:
             continue
         if problem.isGoalState(state):
@@ -153,9 +151,7 @@ def uniformCostSearch(problem):
 
     while not open.isEmpty():
         current = open.pop()
-        state = current[0][0]
-        cost = current[0][1]
-        path = current[1]
+        (state, cost), path = current
 
         if state in closed:
             continue
@@ -189,9 +185,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 
     while not open.isEmpty():
         current = open.pop()
-        state = current[0][0]
-        cost = current[0][1]
-        path = current[1]
+        (state, cost), path = current
         if state in closed:
             continue
         if problem.isGoalState(state):
