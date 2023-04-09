@@ -304,8 +304,7 @@ class CornersProblem(search.SearchProblem):
          required to get there, and 'stepCost' is the incremental
          cost of expanding to that successor
         """
-        currentPosition = state[0]
-        remainingCorners = state[1]
+        currentPosition, remainingCorners = state
         successors = []
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
@@ -321,6 +320,7 @@ class CornersProblem(search.SearchProblem):
                 nextPosition = (nextx, nexty)
                 newCorners = tuple(filter(lambda x: x != nextPosition, remainingCorners))
                 stepCost = self.costFn(nextPosition)
+                assert(cornersHeuristic(state, self) <= stepCost+cornersHeuristic((nextPosition, newCorners), self))
                 successors.append(((nextPosition, newCorners), action, stepCost))
     
         self._expanded += 1
@@ -359,10 +359,17 @@ def cornersHeuristic(state, problem):
     "*** YOUR CODE HERE ***"
     
     position = state[0]
+    acum = 0
     remainingCorners = state[1]
-    distances = tuple(map(lambda x: util.manhattanDistance(position, x), remainingCorners)) # Manhatan
+    
+    while len(remainingCorners) > 0:
+        distances = tuple(map(lambda x: (x, util.manhattanDistance(position, x)), remainingCorners))
+        minimun = min(distances, key = lambda x: x[1])
+        position = minimun[0]
+        acum += minimun[1]
+        remainingCorners = tuple(filter(lambda x: x != position, remainingCorners)) 
 
-    return sum(distances) if len(distances) > 0 else 0
+    return acum
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
