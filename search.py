@@ -159,14 +159,13 @@ def uniformCostSearch(problem):
         if problem.isGoalState(state):
             return path
         
-        if state not in closed:
-            closed.add(state)
-            candidate_successors = problem.getSuccessors(state)
-            candidate_successors = map(lambda x: ((x[0], cost  + x[2]) , path + [x[1]]), candidate_successors)
+        closed.add(state)
+        candidate_successors = problem.getSuccessors(state)
+        candidate_successors = map(lambda x: ((x[0], cost  + x[2]) , path + [x[1]]), candidate_successors)
 
-            for s in candidate_successors:
-                if not s[0] in closed:
-                    open.push(s)
+        for s in candidate_successors:
+            if not s[0] in closed:
+                open.push(s)
 
 def nullHeuristic(state, problem=None):
     """
@@ -191,14 +190,13 @@ def aStarSearch(problem, heuristic=nullHeuristic):
         if problem.isGoalState(state):
             return path
         
-        if state not in closed:
-            closed.add(state)
-            candidate_successors = problem.getSuccessors(state)
-            candidate_successors = map(lambda x: ((x[0], cost  + x[2]) , path + [x[1]]), candidate_successors)
+        closed.add(state)
+        candidate_successors = problem.getSuccessors(state)
+        candidate_successors = map(lambda x: ((x[0], cost  + x[2]) , path + [x[1]]), candidate_successors)
 
-            for s in candidate_successors:
-                if not s[0] in closed:
-                    open.push(s)
+        for s in candidate_successors:
+            if not s[0] in closed:
+                open.push(s)
 
 # Abbreviations
 bfs = breadthFirstSearch
