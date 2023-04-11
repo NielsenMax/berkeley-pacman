@@ -87,25 +87,6 @@ def search(problem, fringe):
             for candidate in candidate_successors:
                 fringe.push(candidate)
 
-def goodSearch(problem, fringe, initial_state, struct_fn, destruct_fn):
-    initial_actions = []
-    initial_candidate = (initial_state, initial_actions)
-    fringe.push(initial_candidate)
-    closed_set = set()
-    while not fringe.isEmpty():
-        current = fringe.pop()
-        state, actions = current
-        destruct = destruct_fn(state)
-        if problem.isGoalState(destruct):
-            return actions
-        if destruct not in closed_set:
-            closed_set.add(destruct)
-            for candidate in problem.getSuccessors(destruct):
-                if destruct not in closed_set:
-                    print(current, candidate)
-                    fringe.push(struct_fn(current,candidate))
-
-
 def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first
@@ -122,8 +103,6 @@ def depthFirstSearch(problem):
     """
     return search(problem, util.Stack())
 
-
-
 def breadthFirstSearch(problem):
     """
     Search the shallowest nodes in the search tree first.
@@ -133,9 +112,7 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     "Search the node of least total cost first."
     
-    # State = (Position, AcumulatedCost)
-    state = (problem.getStartState(),0)
-    return goodSearch(problem,  util.PriorityQueueWithFunction(lambda x: x[0][1]), state, lambda c, x: ((x[0], c[0][1] + x[2]), c[1] + [x[1]]), lambda x: x[0])
+    return search(problem, util.PriorityQueueWithFunction(lambda x: problem.getCostOfActions(x[1])))
 
 def nullHeuristic(state, problem=None):
     """
@@ -147,26 +124,7 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     "Search the node that has the lowest combined cost and heuristic first."
 
-    # State = (Position, AcumulatedCost)
-    open = util.PriorityQueueWithFunction(lambda x: x[0][1] + heuristic(x[0][0], problem))
-    open.push(((problem.getStartState(), 0), [])) 
-    closed = set()
-
-    while not open.isEmpty():
-        current = open.pop()
-        (state, cost), path = current
-        if state in closed:
-            continue
-        if problem.isGoalState(state):
-            return path
-        
-        closed.add(state)
-        candidate_successors = problem.getSuccessors(state)
-        candidate_successors = map(lambda x: ((x[0], cost  + x[2]) , path + [x[1]]), candidate_successors)
-
-        for s in candidate_successors:
-            if not s[0] in closed:
-                open.push(s)
+    return search(problem, util.PriorityQueueWithFunction(lambda x: heuristic(x[0], problem) + problem.getCostOfActions(x[1])))
 
 # Abbreviations
 bfs = breadthFirstSearch
