@@ -339,6 +339,9 @@ class CornersProblem(search.SearchProblem):
             if self.walls[x][y]: return 999999
         return len(actions)
 
+def heuristic(position, corners):
+    f = lambda c: util.manhattanDistance(position, c) + heuristic(c, tuple(filter(lambda x: x != c, corners)))
+    return 0 if len(corners) == 0 else min(map(f,corners))
 
 def cornersHeuristic(state, problem):
     """
@@ -358,18 +361,12 @@ def cornersHeuristic(state, problem):
 
     "*** YOUR CODE HERE ***"
     
-    position = state[0]
-    acum = 0
-    remainingCorners = state[1]
+    position, remainingCorners = state
     
-    while len(remainingCorners) > 0:
-        distances = tuple(map(lambda x: (x, util.manhattanDistance(position, x)), remainingCorners))
-        minimun = min(distances, key = lambda x: x[1])
-        position = minimun[0]
-        acum += minimun[1]
-        remainingCorners = tuple(filter(lambda x: x != position, remainingCorners)) 
+    return heuristic(position, remainingCorners)
+       
 
-    return acum
+        
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
