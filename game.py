@@ -6,6 +6,7 @@
 # John DeNero (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
 # For more info, see http://inst.eecs.berkeley.edu/~cs188/sp09/pacman.html
 
+import functools
 from util import *
 import time, os
 import traceback
@@ -140,6 +141,7 @@ class AgentState:
     def getDirection(self):
         return self.configuration.getDirection()
 
+@functools.total_ordering
 class Grid:
     """
     A 2-dimensional array of objects backed by a list of lists.  Data is accessed
@@ -172,6 +174,9 @@ class Grid:
     def __eq__(self, other):
         if other == None: return False
         return self.data == other.data
+
+    def __lt__(self, other):
+        return False
 
     def __hash__(self):
         # return hash(str(self))
