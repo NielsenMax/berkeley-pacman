@@ -320,6 +320,7 @@ class CornersProblem(search.SearchProblem):
                 nextPosition = (nextx, nexty)
                 newCorners = tuple(filter(lambda x: x != nextPosition, remainingCorners))
                 stepCost = self.costFn(nextPosition)
+                # Verifica si la heuristica es consistente
                 assert(cornersHeuristic(state, self) <= stepCost+cornersHeuristic((nextPosition, newCorners), self))
                 successors.append(((nextPosition, newCorners), action, stepCost))
     
@@ -339,6 +340,9 @@ class CornersProblem(search.SearchProblem):
             if self.walls[x][y]: return 999999
         return len(actions)
 
+# Funcion auxiliar para cornersHeuristic
+# Dada una posicion y una tupla con las esquinas por visitar, devuelve la longitud
+# del camino minimo que parte de la posicion y recorre todas las esquinas restantes.
 def heuristic(position, corners):
     f = lambda c: util.manhattanDistance(position, c) + heuristic(c, tuple(filter(lambda x: x != c, corners)))
     return 0 if len(corners) == 0 else min(map(f,corners))
@@ -364,9 +368,6 @@ def cornersHeuristic(state, problem):
     position, remainingCorners = state
     
     return heuristic(position, remainingCorners)
-       
-
-        
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"

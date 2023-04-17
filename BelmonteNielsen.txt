@@ -1,0 +1,69 @@
+1. Resultados de DFS
+-tiny:  cost = 10
+        nodes = 15
+-medium: cost = 130
+         nodes = 146
+-big: cost = 210
+      nodes = 390
+-open: cost = 298
+       nodes = 576
+
+2. Resultados de BFS
+-tiny:  cost = 8
+        nodes = 15
+-medium: cost = 68
+         nodes = 269
+-big: cost = 210
+      nodes = 620
+-open: cost = 54
+       nodes = 682
+
+3. Resultados de UCS
+-tiny:  cost = 8
+        nodes = 15
+-medium: cost = 68
+         nodes = 268
+-big: cost = 210
+      nodes = 619
+-open: cost = 54
+       nodes = 682
+
+-mediumDotted con StayEastSearchAgent:  cost = 1
+                                        nodes = 186
+-mediumDotted con StayWestSearchAgent:  cost = 17183894840
+                                        nodes = 169
+
+4. Resultados de A*
+-tiny:  cost = 8
+        nodes = 14
+-medium: cost = 68
+         nodes = 219
+-big: cost = 210
+      nodes = 538
+-open: cost = 54
+       nodes = 211
+
+5. Elegimos representar los estados mediante una tupla que contiene 
+la posición actual y una tupla con las esquinas aun no visitadas.
+
+6. Utilizamos como heurística la suma de las distancias de manhattan recorriendo 
+las esquinas, que faltan visitar, de una forma conveniente.
+
+Consistencia y admisibilidad
+Para probar la consistencia necesitamos ver que para todo nodo n y sucesor de n, n':
+ H(n) <= H(n') + C(n, n'). 
+
+En nuestro caso, C(n, n') es igual a 1. Para demostrar que esta condición se cumple para
+todo nodo, hicimos uso de la función ASSERT en el código (función GetSuccesors,
+linea 323) y se puede ver que esta condición se cumple siempre. Además en el 
+estado meta la heurística es 0 y por lo tanto nuestra heurística resulta consistente.
+
+Ahora como la heurística es consistente también es admisible.
+
+Resultados
+-tiny:  cost = 28
+        nodes = 159
+-medium: cost = 106
+         nodes = 741
+-big: cost = 162
+      nodes = 1740
